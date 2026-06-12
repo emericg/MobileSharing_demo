@@ -6,8 +6,7 @@ build/
 bin/
 .DS_Store
 
-# MobileSharing module: Android Java/res are auto-copied here at configure time
-# from thirdparty/MobileSharing/android/ (the real source of truth). Don't commit.
+# MobileSharing module: Android resources are auto-copied from thirdparty/MobileSharing/android/
 assets/android/src/io/emeric/utils/QShareUtils.java
 assets/android/src/io/emeric/utils/QSharePathResolver.java
 assets/android/src/io/emeric/utils/QShareActivity.java

@@ -56,6 +56,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 # MobileSharing
+set(MOBILESHARING_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/assets/android")
 add_subdirectory(thirdparty/MobileSharing/)
 target_link_libraries(${PROJECT_NAME} PRIVATE MobileSharing MobileSharing_plugin)
 
