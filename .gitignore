@@ -1,0 +1,14 @@
+MobileSharing_demo.creator*
+MobileSharing_demo.pro.*
+CMakeLists.txt.user
+Makefile
+build/
+bin/
+.DS_Store
+
+# MobileSharing module: Android Java/res are auto-copied here at configure time
+# from thirdparty/MobileSharing/android/ (the real source of truth). Don't commit.
+assets/android/src/io/emeric/utils/QShareUtils.java
+assets/android/src/io/emeric/utils/QSharePathResolver.java
+assets/android/src/io/emeric/utils/QShareActivity.java
+assets/android/res/xml/filepaths.xml
