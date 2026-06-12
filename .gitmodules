@@ -1,0 +1,6 @@
+[submodule "thirdparty/MobileUI"]
+	path = thirdparty/MobileUI
+	url = git@github.com:emericg/MobileUI.git
+[submodule "thirdparty/MobileSharing"]
+	path = thirdparty/MobileSharing
+	url = git@github.com:emericg/MobileSharing.git
