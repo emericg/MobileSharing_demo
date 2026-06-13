@@ -16,11 +16,10 @@ Window {
 
     flags: Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
 
-    property bool isHdpi: (utilsScreen.screenDpi >= 128 || utilsScreen.screenPar >= 2.0)
     property bool isDesktop: (Qt.platform.os !== "ios" && Qt.platform.os !== "android")
     property bool isMobile: (Qt.platform.os === "ios" || Qt.platform.os === "android")
-    property bool isPhone: ((Qt.platform.os === "ios" || Qt.platform.os === "android") && (utilsScreen.screenSize < 7.0))
-    property bool isTablet: ((Qt.platform.os === "ios" || Qt.platform.os === "android") && (utilsScreen.screenSize >= 7.0))
+    //property bool isPhone: ((Qt.platform.os === "ios" || Qt.platform.os === "android") && (utilsScreen.screenSize < 7.0))
+    //property bool isTablet: ((Qt.platform.os === "ios" || Qt.platform.os === "android") && (utilsScreen.screenSize >= 7.0))
 
     // Mobile stuff ////////////////////////////////////////////////////////////
 
@@ -44,7 +43,7 @@ Window {
         MobileUI.statusbarTheme = MobileUI.Dark
 
         MobileUI.navbarColor = "#eeeeee"
-        MobileUI.navbarTheme = MobileUI.Dark
+        MobileUI.navbarTheme = MobileUI.Light
     }
 
     // Events handling /////////////////////////////////////////////////////////
@@ -69,20 +68,35 @@ Window {
         }
     }
 
+    // MobileSharing ///////////////////////////////////////////////////////////
+
+    MobileSharing {
+        id: mobileSharing
+
+        onShareFinished: (requestCode) => appLog.add("shareFinished (" + requestCode + ")")
+        onShareNoAppAvailable: (requestCode) => appLog.add("shareNoAppAvailable (" + requestCode + ")")
+        onShareError: (requestCode, message) => appLog.add("shareError (" + requestCode + "): " + message)
+
+        onFileUrlReceived: (url) => appLog.add("fileUrlReceived: " + url)
+        onFileReceivedAndSaved: (url) => appLog.add("fileReceivedAndSaved: " + url)
+    }
+
     // UI //////////////////////////////////////////////////////////////////////
 
     FocusScope {
         id: appContent
 
-        anchors.top: appHeader.bottom
+        anchors.top: parent.top
+        anchors.topMargin: Math.max(appWindow.screenPaddingStatusbar, appWindow.screenPaddingTop)
         anchors.left: parent.left
         anchors.leftMargin: screenPaddingLeft
         anchors.right: parent.right
         anchors.rightMargin: screenPaddingRight
-        anchors.bottom: Math.max(appWindow.screenPaddingNavbar, appWindow.screenPaddingBottom)
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Math.max(appWindow.screenPaddingNavbar, appWindow.screenPaddingBottom)
 
         focus: true
-        Keys.onBackPressed: appWindow.backAction()
+
 
         //
     }

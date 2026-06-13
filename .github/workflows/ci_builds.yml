@@ -1,0 +1,180 @@
+#-------------------------------------------------------------------------------
+# Workflow configuration
+#-------------------------------------------------------------------------------
+
+name: "Desktop & Mobile CI builds"
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+#-------------------------------------------------------------------------------
+# Define application name & version
+#-------------------------------------------------------------------------------
+
+env:
+  APP_NAME: "MobileSharing_demo"
+  APP_VERSION: "0.1"
+  QT_VERSION: "6.8.3"
+
+#-------------------------------------------------------------------------------
+# Workflow jobs
+#-------------------------------------------------------------------------------
+
+jobs:
+  ## GNU/Linux build ###########################################################
+  build-linux:
+    name: "Linux 'dummy' CI build"
+    runs-on: ubuntu-24.04
+    steps:
+      # Checkout repository (and submodules)
+      - name: Checkout repository (and submodules)
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      # Install dependencies (from package manager)
+      - name: Install dependencies (from package manager)
+        run: |
+             sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-dev libx11-xcb-dev libzstd-dev -y;
+             sudo apt-get install cmake ninja-build pkgconf libtool -y;
+
+      # Install Qt
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+
+      # Setup env
+      - name: Setup env
+        run: |
+             echo "CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)" >> $GITHUB_ENV
+             qmake --version
+             cmake --version
+             ninja --version
+
+      # Build application
+      - name: Build application
+        run: |
+             cmake -B build/ -G Ninja -DCMAKE_BUILD_TYPE=Release
+             cmake --build build/ --config Release
+
+  ## Android build #############################################################
+  build-android:
+    name: "Android CI build"
+    runs-on: ubuntu-24.04
+    env:
+      ANDROID_NDK: "/usr/local/lib/android/sdk/ndk/28.2.13676358"
+      ANDROID_NDK_ROOT: "/usr/local/lib/android/sdk/ndk/28.2.13676358"
+    steps:
+      # Checkout repository (and submodules)
+      - name: Checkout repository (and submodules)
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      # Java environment (already installed in 'ubuntu-24.04')
+      #- name: Setup Java environment
+      #  uses: actions/setup-java@v4
+      #  with:
+      #    distribution: 'temurin'
+      #    java-version: '17'
+
+      # Android environment
+      - name: Setup Android environment
+        uses: android-actions/setup-android@v3
+      - name: Install Android SDK / NDK / tools
+        run: |
+             sdkmanager "platforms;android-36"
+             sdkmanager "ndk;28.2.13676358"
+             sdkmanager "build-tools;36.1.0"
+
+      # Install Qt (desktop & Android)
+      - name: Install Qt (desktop & Android)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'linux'
+          target: 'android'
+          arch: 'android_arm64_v8a'
+          extra: '--autodesktop'
+
+      # Install dependencies (from package manager)
+      - name: Install dependencies (from package manager)
+        run: |
+             sudo apt-get install cmake ninja-build -y;
+
+      # Setup env
+      - name: Setup env
+        run: |
+             echo "CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)" >> $GITHUB_ENV
+             echo "QT_HOST_PATH=/home/runner/work/${{ github.event.repository.name }}/Qt/${{ env.QT_VERSION }}/gcc_64" >> $GITHUB_ENV
+             echo "QT_TARGET_PATH=/home/runner/work/${{ github.event.repository.name }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
+             qmake --version
+             cmake --version
+             ninja --version
+
+      # Build application
+      - name: Build application
+        run: |
+             ${{ env.QT_TARGET_PATH }}/bin/qt-cmake --version
+             ${{ env.QT_TARGET_PATH }}/bin/qt-cmake -B build/ -G Ninja \
+               -DCMAKE_SYSTEM_NAME=Android \
+               -DCMAKE_BUILD_TYPE=Release \
+               -DCMAKE_FIND_ROOT_PATH:PATH=${{ env.QT_TARGET_PATH }} \
+               -DCMAKE_PREFIX_PATH:PATH=${{ env.QT_TARGET_PATH }} \
+               -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT \
+               -DANDROID_NDK_ROOT=$ANDROID_NDK_ROOT \
+               -DANDROID_PLATFORM=android-28 \
+               -DANDROID_ABI="arm64-v8a" \
+               -DQT_HOST_PATH:PATH=${{ env.QT_HOST_PATH }} \
+               -DQT_ANDROID_BUILD_ALL_ABIS=OFF \
+               -DQT_ANDROID_ABIS="arm64-v8a"
+             cmake --build build/ --config Release
+
+  ## iOS build #################################################################
+  build-ios:
+    name: "iOS CI build"
+    runs-on: macos-15
+    steps:
+      # Checkout repository (and submodules)
+      - name: Checkout repository (and submodules)
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      # Install Qt (desktop & iOS)
+      - name: Install Qt (desktop & iOS)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: 'mac'
+          target: 'ios'
+          extra: '--autodesktop'
+
+      # Install dependencies (from package manager)
+      #- name: Install dependencies (from package manager)
+      #  run: |
+      #       brew install cmake ninja
+
+      # Setup env
+      - name: Setup env
+        run: |
+             echo "CMAKE_BUILD_PARALLEL_LEVEL=$(sysctl -n hw.logicalcpu)" >> $GITHUB_ENV
+             echo "QT_HOST_PATH=/Users/runner/work/${{ github.event.repository.name }}/Qt/${{ env.QT_VERSION }}/macos" >> $GITHUB_ENV
+             echo "QT_TARGET_PATH=/Users/runner/work/${{ github.event.repository.name }}/Qt/${{ env.QT_VERSION }}/ios" >> $GITHUB_ENV
+             qmake --version
+             cmake --version
+             ninja --version
+
+      # Build application
+      - name: Build application
+        run: |
+             ${{ env.QT_TARGET_PATH }}/bin/qt-cmake --version
+             ${{ env.QT_TARGET_PATH }}/bin/qt-cmake -B build/ -G Xcode \
+               -DCMAKE_SYSTEM_NAME=iOS \
+               -DCMAKE_BUILD_TYPE=Release \
+               -DCMAKE_FIND_ROOT_PATH:PATH=${{ env.QT_TARGET_PATH }} \
+               -DCMAKE_PREFIX_PATH:PATH=${{ env.QT_TARGET_PATH }} \
+               -DQT_HOST_PATH:PATH=${{ env.QT_HOST_PATH }}
+             cmake --build build/ --config Release -- CODE_SIGNING_ALLOWED=NO

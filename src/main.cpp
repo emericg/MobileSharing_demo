@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
 
     // Start the UI
     QQmlApplicationEngine engine;
-
     engine.loadFromModule("MobileSharing_demo", "MobileApplication");
 
     if (engine.rootObjects().isEmpty())
