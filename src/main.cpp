@@ -1,9 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include <MobileSharing>
-#include <MobileUI>
-
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);

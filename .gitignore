@@ -8,6 +8,5 @@ bin/
 
 # MobileSharing module: Android resources are auto-copied from thirdparty/MobileSharing/android/
 assets/android/src/io/emeric/utils/QShareUtils.java
-assets/android/src/io/emeric/utils/QSharePathResolver.java
 assets/android/src/io/emeric/utils/QShareActivity.java
 assets/android/res/xml/filepaths.xml

@@ -1,6 +1,8 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
+
+import Qt.labs.folderlistmodel
 
 import MobileUI
 import MobileSharing
@@ -18,8 +20,8 @@ Window {
 
     property bool isDesktop: (Qt.platform.os !== "ios" && Qt.platform.os !== "android")
     property bool isMobile: (Qt.platform.os === "ios" || Qt.platform.os === "android")
-    //property bool isPhone: ((Qt.platform.os === "ios" || Qt.platform.os === "android") && (utilsScreen.screenSize < 7.0))
-    //property bool isTablet: ((Qt.platform.os === "ios" || Qt.platform.os === "android") && (utilsScreen.screenSize >= 7.0))
+    property bool isPhone: MobileUI.isPhone
+    property bool isTablet: MobileUI.isTablet
 
     // Mobile stuff ////////////////////////////////////////////////////////////
 
@@ -28,8 +30,6 @@ Window {
     property int screenOrientation: Screen.primaryOrientation
     property int screenOrientationFull: Screen.orientation
 
-    // MobileUI keeps these up to date on its own, reacting to orientation and
-    // window visibility changes (see thirdparty/MobileUI/).
     property int screenPaddingStatusbar: MobileUI.statusbarHeight
     property int screenPaddingNavbar: MobileUI.navbarHeight
 

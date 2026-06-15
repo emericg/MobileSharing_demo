@@ -9,14 +9,14 @@
 
     <!-- Application -->
     <application android:name="org.qtproject.qt.android.bindings.QtApplication"
-                 android:label="MobileSharing_demo">
+                 android:label="MobileSharing">
 
         <!-- MobileSharing: use the module's QShareActivity (handles incoming SEND/VIEW intents) -->
         <activity android:name="io.emeric.utils.QShareActivity"
                   android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:launchMode="singleTask" android:screenOrientation="unspecified" android:exported="true"
                   android:windowSoftInputMode="adjustPan"
-                  android:label="MobileSharing_demo">
+                  android:label="MobileSharing">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
