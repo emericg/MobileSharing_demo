@@ -85,7 +85,7 @@ android {
         targetSdkVersion = qtTargetSdkVersion
         ndk.abiFilters = qtTargetAbiList.split(",")
 
-        namespace "io.emeric.mobilesharing"
+        namespace "io.emeric.mobilesharingdemo"
     }
 
     packagingOptions {

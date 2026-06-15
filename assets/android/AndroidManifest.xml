@@ -12,7 +12,7 @@
                  android:label="MobileSharing">
 
         <!-- MobileSharing: use the module's QShareActivity (handles incoming SEND/VIEW intents) -->
-        <activity android:name="io.emeric.utils.QShareActivity"
+        <activity android:name="io.emeric.mobilesharing.QShareActivity"
                   android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:launchMode="singleTask" android:screenOrientation="unspecified" android:exported="true"
                   android:windowSoftInputMode="adjustPan"
