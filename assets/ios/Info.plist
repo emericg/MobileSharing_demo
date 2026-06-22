@@ -9,13 +9,13 @@
 	<string>APPL</string>
 
 	<key>CFBundleName</key>
-	<string>MobileSharing_demo</string>
+	<string>MobileSharing</string>
 
 	<key>CFBundleDisplayName</key>
-	<string>MobileSharing_demo</string>
+	<string>MobileSharing</string>
 
 	<key>CFBundleExecutable</key>
-	<string>MobileSharing_demo</string>
+	<string>MobileSharing</string>
 
 	<key>CFBundleIdentifier</key>
 	<string>io.emeric.mobilesharingdemo</string>
@@ -25,15 +25,6 @@
 
 	<key>CFBundleShortVersionString</key>
 	<string>0.1</string>
-
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-
-	<key>CFBundleIconFile</key>
-	<string>AppIcon</string>
-
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

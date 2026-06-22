@@ -276,7 +276,7 @@ Window {
             RowLayout {
                 height: 32
                 Layout.fillWidth: true
-                Layout.alignment: verticalCenter
+                Layout.alignment: Qt.AlignVCenter
 
                 Label {
                     Layout.fillWidth: true
@@ -389,14 +389,14 @@ Window {
 
                 Label {
                     Layout.fillWidth: true
-                    Layout.alignment: verticalCenter
+                    Layout.alignment: Qt.AlignVCenter
 
                     text: "Cached contents (" + cacheFiles.count + ")"
                     font.pixelSize: 18
                     font.bold: true
                 }
                 Button {
-                    Layout.alignment: verticalCenter
+                    Layout.alignment: Qt.AlignVCenter
 
                     text: "Refresh"
                     onClicked: appWindow.scanCache()

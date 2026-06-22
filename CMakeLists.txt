@@ -40,6 +40,8 @@ qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(${PROJECT_NAME} src/main.cpp)
 
+target_include_directories(${PROJECT_NAME} PRIVATE src)
+
 qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
     NO_PLUGIN
@@ -80,7 +82,7 @@ if(ANDROID)
     )
 
     # Support 16 KB page sizes / pre NDK28
-    target_link_options(${PROJECT_NAME} PUBLIC "-Wl,-z,max-page-size=16384")
+    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
 endif()
 
 ## iOS
@@ -99,7 +101,7 @@ if(IOS)
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER           "io.emeric.mobilesharingdemo"
         XCODE_ATTRIBUTE_PRODUCT_NAME                        ${PROJECT_NAME}
         XCODE_ATTRIBUTE_CURRENT_PROJECT_VERSION             ${PROJECT_VERSION}
-        XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET          "14.0"
+        XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET          "16.0"
         XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY              "1,2" # iPhone,iPad
     )
 endif()
