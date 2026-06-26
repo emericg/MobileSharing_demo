@@ -7,11 +7,20 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- MobileSharing: (OPTIONAL / used by checkMimeTypeView())
+         declare the ACTION_VIEW intent we resolve, so Android 11+ package visibility doesn't hide handlers from resolveActivity() -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+
     <!-- Application -->
     <application android:name="org.qtproject.qt.android.bindings.QtApplication"
                  android:label="MobileSharing">
 
-        <!-- MobileSharing: use the module's QShareActivity (handles incoming SEND/VIEW intents) -->
+        <!-- MobileSharing: use the module's QShareActivity (OPTIONAL / handles incoming SEND/VIEW intents) -->
         <activity android:name="io.emeric.mobilesharing.QShareActivity"
                   android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
                   android:launchMode="singleTask" android:screenOrientation="unspecified" android:exported="true"
@@ -23,9 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- MobileSharing: Handle incoming content shared into this app -->
+            <!-- MobileSharing: OPTIONAL / Handle incoming content shared into this app 
+                 Use either or both SEND / SEND_MULTIPLE, and customize accepted incoming mime types -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>
@@ -45,12 +56,25 @@
             <meta-data android:name="android.app.background_running" android:value="false" />
         </activity>
 
-        <!-- MobileSharing: Handle outgoing content -->
+        <!-- MobileSharing: OPTIONAL / Handle outgoing content -->
         <provider android:name="androidx.core.content.FileProvider"
                   android:authorities="${applicationId}.fileprovider"
                   android:exported="false" android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
                        android:resource="@xml/filepaths" />
+        </provider>
+
+        <!-- MobileSharing: (OPTIONAL / DocumentsProvider support (Storage Access Framework))
+             A DocumentsProvider can expose an app-owned directory to other apps through the system file picker.
+             It is declared here but stays inert until enabled at runtime via MobileSharing.setDocumentProviderEnabled(true).
+             The MANAGE_DOCUMENTS permission means only the system DocumentsUI can bind to it. -->
+        <provider android:name="io.emeric.mobilesharing.QShareDocumentProvider"
+                  android:authorities="${applicationId}.documents"
+                  android:exported="true" android:grantUriPermissions="true"
+                  android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
         </provider>
 
     </application>

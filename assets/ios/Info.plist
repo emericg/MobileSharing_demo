@@ -15,7 +15,7 @@
 	<string>MobileSharing</string>
 
 	<key>CFBundleExecutable</key>
-	<string>MobileSharing</string>
+	<string>MobileSharing_demos</string>
 
 	<key>CFBundleIdentifier</key>
 	<string>io.emeric.mobilesharingdemo</string>

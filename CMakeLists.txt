@@ -5,7 +5,6 @@ project(MobileSharing_demo VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(APP_NAME ${PROJECT_NAME})
 set(APP_VERSION ${PROJECT_VERSION})
@@ -45,7 +44,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
     NO_PLUGIN
-    QML_FILES qml/MobileApplication.qml
+    QML_FILES
+        qml/MobileApplication.qml
+        qml/Card.qml
+        qml/PanelSharing.qml
+        qml/PanelStorage.qml
+    SOURCES
+        src/DemoBackend.cpp
+        src/DemoBackend.h
 )
 
 # Qt
