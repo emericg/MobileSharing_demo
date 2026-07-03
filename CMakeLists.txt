@@ -6,9 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-set(APP_NAME ${PROJECT_NAME})
-set(APP_VERSION ${PROJECT_VERSION})
-
 ################################################################################
 
 message(STATUS ">>> BUILDING ${PROJECT_NAME} v${PROJECT_VERSION} >>>")
@@ -63,16 +60,21 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::QuickControls2
 )
 
-# MobileSharing
-add_subdirectory(thirdparty/MobileSharing/)
-target_link_libraries(${PROJECT_NAME} PRIVATE MobileSharing MobileSharing_plugin)
-
 # MobileUI
 add_subdirectory(thirdparty/MobileUI/)
 target_link_libraries(${PROJECT_NAME} PRIVATE MobileUI MobileUI_plugin)
 
+# MobileSharing
+add_subdirectory(thirdparty/MobileSharing/)
+target_link_libraries(${PROJECT_NAME} PRIVATE MobileSharing MobileSharing_plugin)
+
 # Qt official hacks...
-set(QML_IMPORT_PATH "${CMAKE_BINARY_DIR}/MobileUI" CACHE STRING "QML Modules import paths" FORCE)
+set(QML_IMPORT_PATH
+    "${CMAKE_BINARY_DIR}/thirdparty/MobileUI"
+    "${CMAKE_BINARY_DIR}/thirdparty/MobileSharing"
+    CACHE STRING "QML Modules import paths" FORCE)
+
+# Qt official hacks...
 set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 ################################################################################
@@ -116,7 +118,7 @@ endif()
 
 # Output (build)
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_INSTALL_BINDIR}"
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_INSTALL_BINDIR}
 )
 
 # Output (install)

@@ -1,12 +1,12 @@
-MobileSharing_demo.creator*
-MobileSharing_demo.pro.*
 CMakeLists.txt.user
 Makefile
 build/
 bin/
+
+stash/
 .DS_Store
 
-# MobileSharing module: Android resources are auto-copied from thirdparty/MobileSharing/android/
+# Android resources auto-copied from thirdparty/MobileSharing/android/
 assets/android/src/io/emeric/mobilesharing/QShareUtils.java
 assets/android/src/io/emeric/mobilesharing/QShareActivity.java
 assets/android/src/io/emeric/mobilesharing/QShareDocumentProvider.java

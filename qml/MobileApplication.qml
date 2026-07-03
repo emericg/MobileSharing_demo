@@ -14,17 +14,11 @@ Window {
     minimumWidth: 480
     minimumHeight: 960
 
+    flags: Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
     visible: true
     color: "#eee"
 
-    flags: Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
-
-    property bool isDesktop: (Qt.platform.os !== "ios" && Qt.platform.os !== "android")
-    property bool isMobile: (Qt.platform.os === "ios" || Qt.platform.os === "android")
-    property bool isPhone: MobileUI.isPhone
-    property bool isTablet: MobileUI.isTablet
-
-    // Mobile stuff ////////////////////////////////////////////////////////////
+    // MOBILE UI ///////////////////////////////////////////////////////////////
 
     // 1 = Qt.PortraitOrientation, 2 = Qt.LandscapeOrientation
     // 4 = Qt.InvertedPortraitOrientation, 8 = Qt.InvertedLandscapeOrientation
@@ -39,13 +33,40 @@ Window {
     property int screenPaddingRight: MobileUI.safeAreaRight
     property int screenPaddingBottom: MobileUI.safeAreaBottom
 
-    Component.onCompleted: {
-        MobileUI.statusbarColor = "#4361ee"
-        MobileUI.navbarColor = "transparent"
-        MobileUI.navbarContentColor = "#eee"
+    MobileUI_dispatcher {
+        statusbarColor: "#4361ee"
 
-        scanStorage(0)
-        scanStorage(1)
+        navbarColor: "transparent"
+        navbarContentColor: "#eee"
+    }
+
+    Item {
+        id: systemBars
+        anchors.fill: parent
+
+        visible: true
+
+        // System bars // Underlay backups
+        Rectangle {
+            id: statusbarUnderlay
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            visible: true
+            height: MobileUI.statusbarHeight
+            color: MobileUI.statusbarColor
+        }
+        Rectangle {
+            id: navbarUnderlay
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            visible: true
+            height: MobileUI.navbarHeight
+            color: MobileUI.navbarContentColor
+        }
     }
 
     // Events handling /////////////////////////////////////////////////////////
@@ -67,6 +88,18 @@ Window {
                     //console.log("Qt.ApplicationActive")
                     break
             }
+        }
+    }
+
+    Component.onCompleted: {
+        scanStorage(0)
+        scanStorage(1)
+    }
+
+    onClosing: (close) => {
+        if (Qt.platform.os === "android") {
+            close.accepted = false
+            MobileUI.backToHomeScreen()
         }
     }
 
