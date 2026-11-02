@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 
 project(MobileSharing_demo VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 ################################################################################
 
@@ -43,9 +44,9 @@ qt_add_qml_module(${PROJECT_NAME}
     NO_PLUGIN
     QML_FILES
         qml/MobileApplication.qml
-        qml/Card.qml
         qml/PanelSharing.qml
         qml/PanelStorage.qml
+        qml/Card.qml
     SOURCES
         src/DemoBackend.cpp
         src/DemoBackend.h
@@ -70,8 +71,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE MobileSharing MobileSharing_plugin
 
 # Qt official hacks...
 set(QML_IMPORT_PATH
-    "${CMAKE_BINARY_DIR}/thirdparty/MobileUI"
-    "${CMAKE_BINARY_DIR}/thirdparty/MobileSharing"
+    "${CMAKE_BINARY_DIR}/thirdparty/MobileUI/"
+    "${CMAKE_BINARY_DIR}/thirdparty/MobileSharing/"
     CACHE STRING "QML Modules import paths" FORCE)
 
 # Qt official hacks...
@@ -80,37 +81,48 @@ set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 ################################################################################
 
 ## Android
-if(ANDROID)
+if(CMAKE_SYSTEM_NAME STREQUAL "Android")
     set_target_properties(${PROJECT_NAME} PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "io.emeric.mobilesharingdemo"
         #QT_ANDROID_ABIS "armeabi-v7a;arm64-v8a;x86;x86_64"
         #QT_ANDROID_BUILD_ALL_ABIS ON
         QT_ANDROID_MIN_SDK_VERSION 28
         QT_ANDROID_TARGET_SDK_VERSION 36
-        QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/assets/android/"
+        QT_ANDROID_COMPILE_SDK_VERSION 36
+        QT_ANDROID_SDK_BUILD_TOOLS_REVISION 36.1.0
+        QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/platforms/android/"
     )
+
+    # Android NDK (selected by the Qt Creator kit, or ANDROID_NDK_ROOT on the CI)
+    set(ANDROID_NDK_VERSION_EXPECTED 28.2)
+    if(CMAKE_ANDROID_NDK_VERSION AND NOT CMAKE_ANDROID_NDK_VERSION VERSION_EQUAL ANDROID_NDK_VERSION_EXPECTED)
+        message(WARNING "Android NDK ${ANDROID_NDK_VERSION_EXPECTED} expected, building with NDK ${CMAKE_ANDROID_NDK_VERSION}")
+    endif()
 
     # Support 16 KB page sizes / pre NDK28
     target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
 endif()
 
 ## iOS
-if(IOS)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
     set(CMAKE_OSX_ARCHITECTURES "arm64")
     set(CMAKE_OSX_SYSROOT "iphoneos")
     set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0")
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "16.0")
     set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2") # iPhone,iPad
-    set(CMAKE_XCODE_ATTRIBUTE_INFOPLIST_FILE "${PROJECT_SOURCE_DIR}/assets/ios/Info.plist")
+    set(CMAKE_XCODE_ATTRIBUTE_INFOPLIST_FILE "${PROJECT_SOURCE_DIR}/platforms/ios/Info.plist")
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE ON
-        MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/assets/ios/Info.plist"
-        # New Xcode attributes ???
+        MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/platforms/ios/Info.plist"
+        # New Xcode attributes (???)
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER           "io.emeric.mobilesharingdemo"
         XCODE_ATTRIBUTE_PRODUCT_NAME                        ${PROJECT_NAME}
         XCODE_ATTRIBUTE_CURRENT_PROJECT_VERSION             ${PROJECT_VERSION}
+        XCODE_ATTRIBUTE_MARKETING_VERSION                   ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
         XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET          "16.0"
         XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY              "1,2" # iPhone,iPad
+        XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT[variant=Release] "dwarf-with-dsym"
     )
 endif()
 

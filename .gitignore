@@ -7,7 +7,7 @@ stash/
 .DS_Store
 
 # Android resources auto-copied from thirdparty/MobileSharing/android/
-assets/android/src/io/emeric/mobilesharing/QShareUtils.java
-assets/android/src/io/emeric/mobilesharing/QShareActivity.java
-assets/android/src/io/emeric/mobilesharing/QShareDocumentProvider.java
-assets/android/res/xml/filepaths.xml
+platforms/android/src/io/emeric/mobilesharing/QShareUtils.java
+platforms/android/src/io/emeric/mobilesharing/QShareActivity.java
+platforms/android/src/io/emeric/mobilesharing/QShareDocumentProvider.java
+platforms/android/res/xml/filepaths.xml
