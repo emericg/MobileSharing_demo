@@ -18,6 +18,7 @@ apply plugin: 'com.android.application'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'androidx.core:core:1.13.1'
 }
 
 android {
@@ -58,9 +59,8 @@ android {
         abortOnError false
     }
 
-    // Do not compress Qt binary resources file
     androidResources {
-        noCompress += 'rcc'
+        noCompress += 'rcc' // do not compress Qt binary resources file
     }
 
     defaultConfig {
