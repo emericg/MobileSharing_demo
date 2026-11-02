@@ -116,15 +116,18 @@ Window {
 
         function onShareFinished(requestCode) {
             console.log("MobileSharing::onShareFinished(" + requestCode + ")")
+            if (requestCode === appWindow.saveRequestCode) appWindow.saveStatus = "Native: canceled"
         }
         function onShareNoAppAvailable(requestCode) {
             console.log("MobileSharing::onShareNoAppAvailable(" + requestCode + ")")
         }
         function onShareError(requestCode, message) {
             console.log("MobileSharing::onShareError(" + requestCode + ") " + message)
+            if (requestCode === appWindow.saveRequestCode) appWindow.saveStatus = "Native: FAILED - " + message
         }
         function onFileSaved(requestCode) {
             console.log("MobileSharing::onFileSaved(" + requestCode + ")")
+            if (requestCode === appWindow.saveRequestCode) appWindow.saveStatus = "Native: saved OK"
         }
 
         function onFileReceived(path) {
@@ -357,30 +360,30 @@ Window {
                         Layout.fillWidth: true
 
                         columns: appContent.isWide ? 2 : 1
-                    columnSpacing: 12
-                    rowSpacing: 12
+                        columnSpacing: 12
+                        rowSpacing: 12
 
-                    ////
+                        ////
 
-                    PanelSharing {
-                        id: panelSharing
+                        PanelSharing {
+                            id: panelSharing
 
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 100
-                        Layout.alignment: Qt.AlignTop
-                    }
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 100
+                            Layout.alignment: Qt.AlignTop
+                        }
 
-                    ////
+                        ////
 
-                    PanelStorage {
-                        id: panelStorage
+                        PanelStorage {
+                            id: panelStorage
 
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 100
-                        Layout.alignment: Qt.AlignTop
-                    }
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 100
+                            Layout.alignment: Qt.AlignTop
+                        }
 
-                    ////
+                        ////
                     }
                 }
 

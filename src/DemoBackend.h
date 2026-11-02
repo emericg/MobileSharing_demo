@@ -11,6 +11,11 @@
 
 /*!
  * \brief Demo-only helper for the file I/O the QML layer cannot do itself
+ *
+ * Used by the "save file" mini-test to:
+ *  - generate a small throwaway sample file to export, and
+ *  - attempt the "Qt way" of writing to a picker-chosen URL, which fails on Android
+ *    SAF content:// destinations (the very reason MobileSharing::saveFile() exists).
  */
 class DemoBackend : public QObject
 {
